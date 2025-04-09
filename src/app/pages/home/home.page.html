@@ -1,0 +1,29 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>home</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  @for (contact of contacts; track $index) {
+    <app-item-contact
+      [id]="contact.id"
+      [name]="contact.name"
+      [phone]="contact.phone"
+    ></app-item-contact>
+  }
+
+  <ion-fab slot="fixed" horizontal="end" vertical="bottom">
+    <ion-fab-button color="primary">
+      <ion-icon name="chevron-up-circle"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button color="secondary">
+        <ion-icon name="person-add-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button color="tertiary">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+</ion-content>
