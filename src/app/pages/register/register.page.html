@@ -1,0 +1,55 @@
+<ion-content [fullscreen]="true">
+  <ion-list [inset]="true">
+    <ion-title>JITCALL</ion-title>
+    <form [formGroup]="register" (ngSubmit)="onSubmit()">
+      <ion-item>
+        <ion-input
+          formControlName="name"
+          label="Name"
+          labelPlacement="floating"
+          type="text"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input
+          formControlName="lastName"
+          label="Last Name"
+          labelPlacement="floating"
+          type="text"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input
+          formControlName="email"
+          label="Email"
+          labelPlacement="floating"
+          type="email"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input
+          formControlName="password"
+          label="Password"
+          labelPlacement="floating"
+          type="password"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input
+          formControlName="phone"
+          label="Phone"
+          labelPlacement="floating"
+          type="tel"
+        ></ion-input>
+      </ion-item>
+      <ion-button
+        expand="full"
+        color="primary"
+        [disabled]="register.invalid"
+        (click)="onSubmit()"
+      >
+        register
+      </ion-button>
+    </form>
+  </ion-list>
+</ion-content>

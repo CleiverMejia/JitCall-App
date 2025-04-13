@@ -1,12 +1,33 @@
 <ion-content [fullscreen]="true" color="light">
   <ion-list [inset]="true">
     <ion-title>JITCALL</ion-title>
-    <ion-item>
-      <ion-input label="Email" labelPlacement="floating" type="email"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-input label="Password" labelPlacement="floating" type="password"></ion-input>
-    </ion-item>
-    <ion-button expand="full" color="primary">Login</ion-button>
+    <form [formGroup]="login" (ngSubmit)="onSubmit()">
+      <ion-item>
+        <ion-input
+          formControlName="email"
+          label="Email"
+          labelPlacement="floating"
+          type="email"
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input
+          formControlName="password"
+          label="Password"
+          labelPlacement="floating"
+          type="password"
+        ></ion-input>
+      </ion-item>
+
+      <ion-label style="color: red">{{ error }}</ion-label>
+
+      <ion-button
+        expand="full"
+        color="primary"
+        [disabled]="login.invalid"
+        (click)="onSubmit()"
+        >Login</ion-button
+      >
+    </form>
   </ion-list>
 </ion-content>

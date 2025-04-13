@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import Contact from 'src/app/models/Contact';
+import Contact from 'src/app/models/contact.model';
 
 @Component({
   selector: 'app-item-contact',
@@ -8,7 +8,7 @@ import Contact from 'src/app/models/Contact';
   standalone: false
 })
 export class ItemContactComponent  implements OnInit {
-  @Input() id: number | undefined = 0;
+  @Input() id: string | undefined = '';
   @Input() name: string = '';
   @Input() phone: string = '';
 

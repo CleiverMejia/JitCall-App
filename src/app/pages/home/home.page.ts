@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import Contact from 'src/app/models/Contact';
+import User from '@models/user.model';
+import Contact from 'src/app/models/contact.model';
+import { AuthService } from 'src/app/shared/services/auth/auth.service';
+import { UserService } from 'src/app/shared/services/user/user.service';
 
 @Component({
   selector: 'app-home',
@@ -10,38 +13,56 @@ import Contact from 'src/app/models/Contact';
 export class HomePage implements OnInit {
   contacts: Contact[] = [
     {
-      id: 1,
-      name: 'John',
-      lastName: 'Doe',
+      id: '1',
       email: 'john.doe@example.com',
-      phone: '123-456-7890'
+      password: '',
+      user: {
+        name: 'John',
+        lastName: 'Doe',
+        phone: '123-456-7890',
+      },
     },
     {
-      id: 2,
-      name: 'Jane',
-      lastName: 'Smith',
+      id: '2',
+      password: '',
       email: 'jane.smith@example.com',
-      phone: '987-654-3210'
+      user: {
+        name: 'Jane',
+        lastName: 'Smith',
+        phone: '987-654-3210',
+      },
     },
     {
-      id: 3,
-      name: 'Alice',
-      lastName: 'Johnson',
+      id: '3',
       email: 'alice.johnson@example.com',
-      phone: '555-123-4567'
+      password: '',
+      user: {
+        name: 'Alice',
+        lastName: 'Johnson',
+        phone: '555-123-4567',
+      },
     },
     {
-      id: 4,
-      name: 'Bob',
-      lastName: 'Brown',
+      id: '4',
       email: 'bob.brown@example.com',
-      phone: '444-987-6543'
-    }
-  ]
+      password: '',
+      user: {
+        name: 'Bob',
+        lastName: 'Brown',
+        phone: '444-987-6543',
+      },
+    },
+  ];
 
-  constructor() { }
+  constructor(
+    private userService: UserService,
+  ) {}
 
   ngOnInit() {
-  }
+    this.userService.getUsers().subscribe((data: User[]) => {
+      data.forEach((e: User) => console.log(e));
+    });
 
+    // this.authService.register('jkvj477@gmail.com', 'tetoworlddomination')
+  }
 }
