@@ -21,11 +21,13 @@
 
       <ion-label style="color: red">{{ error }}</ion-label>
 
+      <ion-label>¿No tienes una cuenta? <a>registrarse</a></ion-label>
+
       <ion-button
+        type="ngSubmit"
         expand="full"
         color="primary"
         [disabled]="login.invalid"
-        (click)="onSubmit()"
         >Login</ion-button
       >
     </form>

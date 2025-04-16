@@ -42,11 +42,14 @@
           type="tel"
         ></ion-input>
       </ion-item>
+
+      <ion-label>¿Ya tienes una cuenta? <a>logearse</a></ion-label>
+
       <ion-button
+        type="ngSubmit"
         expand="full"
         color="primary"
         [disabled]="register.invalid"
-        (click)="onSubmit()"
       >
         register
       </ion-button>

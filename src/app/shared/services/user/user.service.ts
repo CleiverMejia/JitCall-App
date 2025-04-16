@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { collection, collectionData, Firestore } from '@angular/fire/firestore';
 
 import { catchError, map, Observable } from 'rxjs';
-import User from '@models/user.model';
+import User from '@interfaces/user.interface';
 import {
   addDoc,
   deleteDoc,
@@ -18,11 +18,10 @@ import {
 })
 export class UserService {
   private readonly USERS: string = 'users'
-  private readonly CONTACTS: string = 'contacts'
 
   constructor(private firestore: Firestore) { }
 
-  getUsers(): Observable<User[]> {
+  public getUsers(): Observable<User[]> {
     const placeRef = collection(this.firestore, this.USERS);
 
     return collectionData(placeRef, {
@@ -30,9 +29,9 @@ export class UserService {
     }) as Observable<User[]>;
   }
 
-  async createUser(user: User): Promise<void> {
-    const placeRef = collection(this.firestore, this.USERS);
+  public async createUser(id: string, user: User): Promise<void> {
+    const placeRef = doc(this.firestore, this.USERS, id);
 
-    await addDoc(placeRef, user);
+    await setDoc(placeRef, user);
   }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '@services/auth/auth.service';
 import { UserService } from '@services/user/user.service';
-import User from '@models/user.model'
+import User from '@interfaces/user.interface';
 
 @Component({
   selector: 'app-register',
@@ -12,11 +12,6 @@ import User from '@models/user.model'
 })
 export class RegisterPage implements OnInit {
   public register: FormGroup;
-  public name: string = '';
-  public lastName: string = '';
-  public email: string = '';
-  public password: string = '';
-  public phone: string = '';
 
   constructor(
     private authService: AuthService,
@@ -40,9 +35,12 @@ export class RegisterPage implements OnInit {
 
     this.authService.register(email, password).then(res => {
       if(res) {
-        let user: User = {name, lastName, phone};
+        this.authService.getCurrentUser().then(res => {
+          let id: string = res?.uid ?? ''
+          let user: User = { name, lastName, phone};
 
-        this.userService.createUser(user);
+          this.userService.createUser(id, user);
+        })
       }
     }).catch(err => {
       console.log(err);

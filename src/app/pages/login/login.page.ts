@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { StorageService } from '@services/storage/storage.service';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 
 @Component({
@@ -15,6 +16,7 @@ export class LoginPage implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private storageService: StorageService,
     private form: FormBuilder,
     private router: Router
   ) {
@@ -28,7 +30,7 @@ export class LoginPage implements OnInit {
 
   onSubmit() {
     if (this.login.valid) {
-      let {email, password} = this.login.value
+      let { email, password } = this.login.value
 
       this.authService
         .login(email, password)
@@ -36,8 +38,7 @@ export class LoginPage implements OnInit {
           resp.user
             .getIdToken()
             .then((accessToken) => {
-              localStorage.setItem('accessToken', accessToken)
-              console.log(accessToken)
+              this.storageService.set('accessToken', accessToken)
             });
           
           this.router.navigate(['/home'])

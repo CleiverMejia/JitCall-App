@@ -5,12 +5,14 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  @for (contact of contacts; track $index) {
-    <app-item-contact
-      [id]="contact.id"
-      [name]="contact.user.name"
-      [phone]="contact.user.phone"
-    ></app-item-contact>
+  @if(contacts) {
+    @for (contact of contacts; track $index) {
+      <app-item-contact
+        [id]="contact.id"
+        [name]="contact.name"
+        [phone]="contact.phone"
+      ></app-item-contact>
+    }
   }
 
   <ion-fab slot="fixed" horizontal="end" vertical="bottom">
@@ -18,12 +20,44 @@
       <ion-icon name="chevron-up-circle"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
-      <ion-fab-button color="secondary">
+      <ion-fab-button color="secondary" id="open-modal">
         <ion-icon name="person-add-outline"></ion-icon>
       </ion-fab-button>
-      <ion-fab-button color="tertiary">
+      <ion-fab-button color="tertiary" (click)="logout()">
         <ion-icon name="log-out-outline"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
   </ion-fab>
+
+  <ion-modal trigger="open-modal">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button (click)="cancel()">Cancel</ion-button>
+          </ion-buttons>
+          <ion-title>Add Phone Number</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-item>
+          <ion-input
+            label="Name"
+            labelPlacement="floating"
+            type="text"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input
+            label="Phone number"
+            labelPlacement="floating"
+            type="tel"
+          ></ion-input>
+        </ion-item>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

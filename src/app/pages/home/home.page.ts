@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import User from '@models/user.model';
-import Contact from 'src/app/models/contact.model';
-import { AuthService } from 'src/app/shared/services/auth/auth.service';
-import { UserService } from 'src/app/shared/services/user/user.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import Contact from '@interfaces/contact.interface';
+import { AuthService } from '@services/auth/auth.service';
+import { ContactService } from '@services/contact/contact.service';
+import { StorageService } from '@services/storage/storage.service';
+import { OverlayEventDetail } from '@ionic/core/components';
+import { Router } from '@angular/router';
+import { IonModal } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -11,58 +14,51 @@ import { UserService } from 'src/app/shared/services/user/user.service';
   standalone: false,
 })
 export class HomePage implements OnInit {
-  contacts: Contact[] = [
-    {
-      id: '1',
-      email: 'john.doe@example.com',
-      password: '',
-      user: {
-        name: 'John',
-        lastName: 'Doe',
-        phone: '123-456-7890',
-      },
-    },
-    {
-      id: '2',
-      password: '',
-      email: 'jane.smith@example.com',
-      user: {
-        name: 'Jane',
-        lastName: 'Smith',
-        phone: '987-654-3210',
-      },
-    },
-    {
-      id: '3',
-      email: 'alice.johnson@example.com',
-      password: '',
-      user: {
-        name: 'Alice',
-        lastName: 'Johnson',
-        phone: '555-123-4567',
-      },
-    },
-    {
-      id: '4',
-      email: 'bob.brown@example.com',
-      password: '',
-      user: {
-        name: 'Bob',
-        lastName: 'Brown',
-        phone: '444-987-6543',
-      },
-    },
-  ];
+  @ViewChild(IonModal) modal!: IonModal;
+
+  contacts!: Contact[];
+  message = 'This modal example uses triggers to automatically open a modal when the button is clicked.';
+  name!: string;
 
   constructor(
-    private userService: UserService,
+    private authService: AuthService,
+    private contactService: ContactService,
+    private storageService: StorageService,
+    private router: Router
   ) {}
 
   ngOnInit() {
-    this.userService.getUsers().subscribe((data: User[]) => {
-      data.forEach((e: User) => console.log(e));
-    });
+    this.setContacts();
+  }
 
-    // this.authService.register('jkvj477@gmail.com', 'tetoworlddomination')
+  public setContacts(): void {
+    this.authService.getCurrentUser().then((res) => {
+      if (res)
+        this.contactService
+          .getContacts(res.uid)
+          .subscribe((contacts: Contact[]) => {
+            this.contacts = contacts;
+          });
+    });
+  }
+
+  public logout(): void {
+    this.authService.logout();
+    this.storageService.clear();
+    this.router.navigate(['/login']);
+  }
+
+  cancel() {
+    this.modal.dismiss(null, 'cancel');
+  }
+
+  confirm() {
+    this.modal.dismiss(this.name, 'confirm');
+  }
+
+  onWillDismiss(event: CustomEvent<OverlayEventDetail>) {
+    if (event.detail.role === 'confirm') {
+      this.message = `Hello, ${event.detail.data}!`;
+    }
   }
 }
