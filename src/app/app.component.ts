@@ -11,16 +11,4 @@ import { FcmService } from '@services/fcm/fcm.service';
   standalone: false
 })
 export class AppComponent {
-  constructor(
-    private platform: Platform,
-    private fcmService: FcmService
-  ) {
-    this.initializeApp();
-  }
-
-  initializeApp() {
-    this.platform.ready().then(() => {
-      this.fcmService.initPush();
-    });
-  }
 }

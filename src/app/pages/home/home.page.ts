@@ -6,6 +6,7 @@ import { StorageService } from '@services/storage/storage.service';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { Router } from '@angular/router';
 import { IonModal } from '@ionic/angular';
+import { UserService } from '@services/user/user.service';
 
 @Component({
   selector: 'app-home',
@@ -24,6 +25,7 @@ export class HomePage implements OnInit {
     private authService: AuthService,
     private contactService: ContactService,
     private storageService: StorageService,
+    private userService: UserService,
     private router: Router
   ) {}
 
@@ -53,6 +55,8 @@ export class HomePage implements OnInit {
   }
 
   confirm() {
+    this.userService.getTokenByPhone('2319233132')
+    .then(resp => console.log(resp))
     this.modal.dismiss(this.name, 'confirm');
   }
 
