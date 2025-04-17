@@ -1,4 +1,4 @@
-package com.pushnotification.app;
+package com.jitcall.app;
 
 import com.getcapacitor.BridgeActivity;
 

@@ -1,6 +1,6 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
-  appId: 'com.pushnotification.app',
+  appId: 'com.jitcall.app',
   appName: 'jitCall',
   webDir: 'www',
   server: {
