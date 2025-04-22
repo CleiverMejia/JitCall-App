@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '@services/auth/auth.service';
 import { UserService } from '@services/user/user.service';
 import User from '@interfaces/user.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -16,7 +17,8 @@ export class RegisterPage implements OnInit {
   constructor(
     private authService: AuthService,
     private userService: UserService,
-    private form: FormBuilder
+    private form: FormBuilder,
+    private router: Router
   ) {
     this.register= this.form.group({
       name: ['', [Validators.required]],
@@ -40,6 +42,7 @@ export class RegisterPage implements OnInit {
           let user: User = { name, lastName, phone};
 
           this.userService.createUser(id, user);
+          this.router.navigate(['/login'])
         })
       }
     }).catch(err => {

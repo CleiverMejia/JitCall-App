@@ -1,6 +1,14 @@
 import { Injectable } from '@angular/core';
-import { collection, collectionData, Firestore } from '@angular/fire/firestore';
+import { user } from '@angular/fire/auth';
+import {
+  collection,
+  collectionData,
+  doc,
+  Firestore,
+  setDoc,
+} from '@angular/fire/firestore';
 import Contact from '@interfaces/contact.interface';
+import { addDoc } from 'firebase/firestore';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -23,5 +31,11 @@ export class ContactService {
     return collectionData(placeRef, {
       idField: 'id',
     }) as Observable<Contact[]>;
+  }
+
+  async addContact(userId: string, contact: Contact) {
+    const placeRef = collection(this.firestore, this.USERS, userId, this.CONTACTS);
+
+    await addDoc(placeRef, contact);
   }
 }

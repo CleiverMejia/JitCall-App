@@ -18,8 +18,12 @@ export class HomePage implements OnInit {
   @ViewChild(IonModal) modal!: IonModal;
 
   contacts!: Contact[];
-  message = 'This modal example uses triggers to automatically open a modal when the button is clicked.';
+  message =
+    'This modal example uses triggers to automatically open a modal when the button is clicked.';
   name!: string;
+  phone!: string;
+
+  toastMessage: string = '';
 
   constructor(
     private authService: AuthService,
@@ -55,14 +59,35 @@ export class HomePage implements OnInit {
   }
 
   confirm() {
-    this.userService.getTokenByPhone('2319233132')
-    .then(resp => console.log(resp))
-    this.modal.dismiss(this.name, 'confirm');
+    this.userService.getTokenByPhone(this.phone).then((resp) => {
+      if (resp) {
+        let contact: Contact = {
+          name: this.name,
+          phone: this.phone,
+        };
+
+        this.authService.getCurrentUser().then((token) => {
+          if (token) {
+            this.contactService.addContact(token.uid, contact);
+            this.name = ''
+            this.phone = ''
+          }
+        });
+      }
+    });
+
+    this.modal.dismiss(
+      {
+        name: this.name,
+        contact: this.phone,
+      },
+      'confirm'
+    );
   }
 
   onWillDismiss(event: CustomEvent<OverlayEventDetail>) {
     if (event.detail.role === 'confirm') {
-      this.message = `Hello, ${event.detail.data}!`;
+      this.toastMessage = event.detail.data;
     }
   }
 }
