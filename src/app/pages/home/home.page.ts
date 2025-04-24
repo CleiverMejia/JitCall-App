@@ -9,6 +9,10 @@ import { IonModal } from '@ionic/angular';
 import { UserService } from '@services/user/user.service';
 import { HttpService } from '@services/http/http.service';
 import TokenResponse from '@interfaces/tokenResponse.interface';
+import { FcmService } from '@services/fcm/fcm.service';
+import User from '@interfaces/user.interface';
+import SendNotification from '@interfaces/sendNotification.interface';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-home',
@@ -33,11 +37,17 @@ export class HomePage implements OnInit {
     private storageService: StorageService,
     private userService: UserService,
     private httpService: HttpService,
+    private fcmService: FcmService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.setContacts();
+    this.ionViewWillEnter();
+  }
+
+  ionViewWillEnter() {
+    this.fcmService.initPush();
   }
 
   public setContacts(): void {
@@ -97,13 +107,48 @@ export class HomePage implements OnInit {
   callUser(contactId: string): void {
     this.httpService.getToken().subscribe({
       next: (resp: TokenResponse) => {
-        console.log(resp);
-        
         this.storageService.set("accessToken", resp.data.access_token)
+      
+        this.sendNotification(contactId)
       },
       error: (err) => {
         console.log(err)
       }
     })
+  }
+
+  private async sendNotification(id: string) {
+    let userId = this.storageService.get("userToken");
+    let resp = await this.userService.getUser(userId);
+
+    if (resp) {
+      let user: User = resp.data() as User;
+      let notification: SendNotification =  {
+        token: user.token ?? '',
+        notification: {
+          title: 'Llamada entrante',
+          body: `${user.name} ${user.lastName} te está llamando`,
+        },
+        android: {
+          priority: "high",
+          data: {
+            userId: id,
+            meetingId: uuidv4(),
+            type: "incoming_call",
+            name: user.name,
+            userFrom: userId
+          }
+        }
+      }
+
+      this.httpService.sendNotification(notification).subscribe({
+        next: (resp) => {
+          console.log(resp);
+        },
+        error: (err) => {
+          console.log(err)
+        }
+      })
+    }
   }
 }

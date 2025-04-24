@@ -3,7 +3,7 @@ import { collection, collectionData, Firestore } from '@angular/fire/firestore';
 
 import { Observable } from 'rxjs';
 import User from '@interfaces/user.interface';
-import { doc, getDocs, query, setDoc, where } from 'firebase/firestore';
+import { doc, getDoc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -21,10 +21,20 @@ export class UserService {
     }) as Observable<User[]>;
   }
 
+  public async getUser(id: string) {
+    return await getDoc(doc(this.firestore, this.USERS, id))
+  }
+
   public async createUser(id: string, user: User): Promise<void> {
     const placeRef = doc(this.firestore, this.USERS, id);
 
     await setDoc(placeRef, user);
+  }
+
+  public async setUserToken(id: string, token: string) {
+    const placeRef = doc(this.firestore, this.USERS, id ?? '');
+
+    return updateDoc(placeRef, {token: token});
   }
 
   async getTokenByPhone(phone: string): Promise<boolean> {

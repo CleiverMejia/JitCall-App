@@ -21,7 +21,6 @@ export class LoginPage implements OnInit {
     private storageService: StorageService,
     private form: FormBuilder,
     private router: Router,
-    private fcmService: FcmService
   ) {
     this.login = this.form.group({
       email: ['', [Validators.required, Validators.email]],
@@ -31,10 +30,6 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {}
 
-  ionViewWillEnter() {
-    this.fcmService.initPush();
-  }
-
   onSubmit() {
     if (this.login.valid) {
       let { email, password } = this.login.value;
@@ -43,7 +38,7 @@ export class LoginPage implements OnInit {
         .login(email, password)
         .then((resp) => {
           if (resp) {
-            this.storageService.set('logged', 'true')
+            this.storageService.set('userToken', resp.user.uid)
             this.router.navigate(['/home'])
           };
         })

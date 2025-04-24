@@ -20,8 +20,12 @@ import { AuthInterceptor } from './core/interceptors/auth/auth.interceptor';
     HttpClientModule,
   ],
   providers: [
+    { 
+      provide: RouteReuseStrategy, 
+      useClass: IonicRouteStrategy 
+    },
     {
-      provide: [RouteReuseStrategy, HTTP_INTERCEPTORS],
+      provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true,
     },

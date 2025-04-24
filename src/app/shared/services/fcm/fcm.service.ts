@@ -5,21 +5,18 @@ import { Router } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
 
 import { PushNotifications } from '@capacitor/push-notifications';
-
-import { map } from 'rxjs';
-
-import { HttpClient } from '@angular/common/http';
-
-import { environment } from 'src/environments/environment';
 import { AuthService } from '@services/auth/auth.service';
+import { UserService } from '@services/user/user.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FcmService {
   constructor(
-    private router: Router
-  ) {}
+    private router: Router,
+    private userService: UserService,
+    private authService: AuthService
+  ) { }
 
   initPush() {
     console.log('platform wroking');
@@ -41,7 +38,13 @@ export class FcmService {
     PushNotifications.addListener('registration', async (token) => {
       console.log('token', token);
 
-      if (token) localStorage.setItem('push-notification-token', token.value);
+      if (token) {
+        this.authService.getCurrentUser().then(resp => {
+          if (resp) {
+            this.userService.setUserToken(resp.uid, token.value)
+          }
+        })
+      }
     });
     PushNotifications.addListener('registrationError', (error: any) => {
       console.log('Error', JSON.stringify(error));

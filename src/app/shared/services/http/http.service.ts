@@ -19,7 +19,9 @@ export class HttpService {
     return this.http.post<TokenResponse>(this.urlToken, this.credentials)
   }
 
-  public sendNotification() {
-    return this.http.post<SendNotification>(this.urlNotification, this.credentials)
+  public sendNotification(notification: SendNotification) {
+    console.log(notification);
+    
+    return this.http.post<SendNotification>(this.urlNotification, notification)
   }
 }
