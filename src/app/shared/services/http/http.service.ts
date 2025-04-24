@@ -1,0 +1,25 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { environment } from '@enviroment/environment';
+import SendNotification from '@interfaces/sendNotification.interface';
+import TokenResponse from '@interfaces/tokenResponse.interface';
+import { Observable } from 'rxjs/internal/Observable';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class HttpService {
+  private readonly credentials = environment.credentials
+  private readonly urlToken = environment.urlToken;
+  private readonly urlNotification = environment.urlNotification;
+
+  constructor(private http: HttpClient) { }
+
+  public getToken() {
+    return this.http.post<TokenResponse>(this.urlToken, this.credentials)
+  }
+
+  public sendNotification() {
+    return this.http.post<SendNotification>(this.urlNotification, this.credentials)
+  }
+}

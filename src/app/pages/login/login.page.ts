@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { FcmService } from '@services/fcm/fcm.service';
+import { HttpService } from '@services/http/http.service';
 import { StorageService } from '@services/storage/storage.service';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 
@@ -18,7 +20,8 @@ export class LoginPage implements OnInit {
     private authService: AuthService,
     private storageService: StorageService,
     private form: FormBuilder,
-    private router: Router
+    private router: Router,
+    private fcmService: FcmService
   ) {
     this.login = this.form.group({
       email: ['', [Validators.required, Validators.email]],
@@ -28,20 +31,21 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {}
 
+  ionViewWillEnter() {
+    this.fcmService.initPush();
+  }
+
   onSubmit() {
     if (this.login.valid) {
-      let { email, password } = this.login.value
+      let { email, password } = this.login.value;
 
       this.authService
         .login(email, password)
         .then((resp) => {
-          resp.user
-            .getIdToken()
-            .then((accessToken) => {
-              this.storageService.set('accessToken', accessToken)
-            });
-          
-          this.router.navigate(['/home'])
+          if (resp) {
+            this.storageService.set('logged', 'true')
+            this.router.navigate(['/home'])
+          };
         })
         .catch((error) => {
           this.error = 'Error al iniciar sesión';

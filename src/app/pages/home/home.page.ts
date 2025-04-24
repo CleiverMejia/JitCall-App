@@ -7,6 +7,8 @@ import { OverlayEventDetail } from '@ionic/core/components';
 import { Router } from '@angular/router';
 import { IonModal } from '@ionic/angular';
 import { UserService } from '@services/user/user.service';
+import { HttpService } from '@services/http/http.service';
+import TokenResponse from '@interfaces/tokenResponse.interface';
 
 @Component({
   selector: 'app-home',
@@ -30,6 +32,7 @@ export class HomePage implements OnInit {
     private contactService: ContactService,
     private storageService: StorageService,
     private userService: UserService,
+    private httpService: HttpService,
     private router: Router
   ) {}
 
@@ -89,5 +92,18 @@ export class HomePage implements OnInit {
     if (event.detail.role === 'confirm') {
       this.toastMessage = event.detail.data;
     }
+  }
+
+  callUser(contactId: string): void {
+    this.httpService.getToken().subscribe({
+      next: (resp: TokenResponse) => {
+        console.log(resp);
+        
+        this.storageService.set("accessToken", resp.data.access_token)
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    })
   }
 }

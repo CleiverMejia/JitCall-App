@@ -8,5 +8,11 @@ export const environment = {
     messagingSenderId: "62509443206",
     appId: "1:62509443206:web:933a4609fbbe819283c907",
     measurementId: "G-V808ZKJ169"
-  }
+  },
+  credentials: {
+    email: "cleiver.mejiarodriguez@unicolombo.edu.co",
+    password: "12073015"
+  },
+  urlToken: "https://ravishing-courtesy-production.up.railway.app/user/login",
+  urlNotification: "https://ravishing-courtesy-production.up.railway.app/notifications"
 };

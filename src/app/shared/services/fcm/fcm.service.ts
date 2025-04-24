@@ -18,10 +18,7 @@ import { AuthService } from '@services/auth/auth.service';
 })
 export class FcmService {
   constructor(
-    private router: Router,
-    private authService: AuthService,
-    private http: HttpClient,
-    private zone: NgZone
+    private router: Router
   ) {}
 
   initPush() {

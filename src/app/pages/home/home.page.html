@@ -11,6 +11,7 @@
         [id]="contact.id"
         [name]="contact.name"
         [phone]="contact.phone"
+        (click)="callUser(contact.id ?? '')"
       ></app-item-contact>
     }
   }
